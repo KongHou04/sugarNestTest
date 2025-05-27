@@ -1,0 +1,28 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sql_server2022
+    ports: # not actually needed, because the two services are on the same network
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=y
+      - MSSQL_SA_PASSWORD=StrongP@ssw0rd123
+    networks:
+      - mynetwork
+  web_api:
+    build:
+      context: .
+      dockerfile: MyShop/Dockerfile
+    image: myshop # api image name
+    container_name: myshop_api_application  
+    ports:
+      - "5000:8080" # Listening on 8080 / 8081 => follow docker file
+    environment:
+      - ConnectionStrings__Default=Server=sql_server2022;Database=MyShopDb;User Id=sa;Password=StrongP@ssw0rd123;TrustServerCertificate=True;
+    depends_on:
+      - sql
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
