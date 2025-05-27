@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +36,18 @@ namespace MyShop.Controllers
 
             return product;
         }
-
+        [HttpGet("bycategory/{id}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategory(int id)
+        {
+            var products = await _context.Products
+                .Where(p => p.CategoryId == id)
+                .ToListAsync();
+            if (products == null || !products.Any())
+            {
+                return NotFound();
+            }
+            return products;
+        }
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
