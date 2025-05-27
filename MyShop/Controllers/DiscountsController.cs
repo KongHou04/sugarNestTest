@@ -2,57 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.Entities;
-using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Domain.Entities;
+using Infrastructure;
 
 namespace MyShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class DiscountsController : ControllerBase
     {
         private readonly MyShopDbContext _context;
 
-        public ProductsController(MyShopDbContext context)
+        public DiscountsController(MyShopDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Products
+        // GET: api/Discounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Discount>>> GetDiscounts()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Discounts.ToListAsync();
         }
 
-        // GET: api/Products/5
+        // GET: api/Discounts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<Discount>> GetDiscount(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var discount = await _context.Discounts.FindAsync(id);
 
-            if (product == null)
+            if (discount == null)
             {
                 return NotFound();
             }
 
-            return product;
+            return discount;
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Discounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        public async Task<IActionResult> PutDiscount(int id, Discount discount)
         {
-            if (id != product.Id)
+            if (id != discount.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            _context.Entry(discount).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace MyShop.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!DiscountExists(id))
                 {
                     return NotFound();
                 }
@@ -73,36 +73,36 @@ namespace MyShop.Controllers
             return NoContent();
         }
 
-        // POST: api/Products
+        // POST: api/Discounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Discount>> PostDiscount(Discount discount)
         {
-            _context.Products.Add(product);
+            _context.Discounts.Add(discount);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            return CreatedAtAction("GetDiscount", new { id = discount.Id }, discount);
         }
 
-        // DELETE: api/Products/5
+        // DELETE: api/Discounts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteDiscount(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var discount = await _context.Discounts.FindAsync(id);
+            if (discount == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(product);
+            _context.Discounts.Remove(discount);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ProductExists(int id)
+        private bool DiscountExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.Discounts.Any(e => e.Id == id);
         }
     }
 }
