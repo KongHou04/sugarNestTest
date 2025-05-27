@@ -18,5 +18,7 @@ namespace Domain.Entities
         [Column(TypeName = "decimal(18, 2)")]
         [Range(0, 50)]
         public decimal Price { get; set; }
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }
